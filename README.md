@@ -1,6 +1,6 @@
-# sticking_pattern_generator
+# drum-sticking-pattern-generator
 
-> A website that generates sticking patterns for drummers to practice
+> A website that generates sticking patterns for drummers to practice to
 
 ## Build Setup
 
