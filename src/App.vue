@@ -94,8 +94,8 @@ $button-height: 2em;
   line-height: $button-height;
   margin: 20px auto;
   opacity: 0.8;
-  -webkit-transition: .1s;
-  transition: opacity .1s;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
 }
 
 #genButton:active {
@@ -104,18 +104,19 @@ $button-height: 2em;
   background-color: $blue-dark;
 }
 
-.hitsBox {
+.hitsBox, .generalBox {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
 }
 
+.hitsBox {
+  flex-direction: row;
+}
+
 .generalBox {
-  display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
 .noselect {
@@ -143,8 +144,8 @@ $button-height: 2em;
   background: #d3d3d3; /* Grey background */
   outline: none; /* Remove outline */
   opacity: 0.8; /* Set transparency (for mouse-over effects on hover) */
-  -webkit-transition: .1s; /* 0.2 seconds transition on hover */
-  transition: opacity .1s;
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
   margin: 10px 0 20px 0;
 }
 
