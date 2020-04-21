@@ -3,7 +3,7 @@
     <!--<h1>Metronome: <input class="textInput" type="number" min="10" max="300" v-model="metronome">BPM</h1>-->
     <b style="font-size: 26px; margin: 10px; color: #333">{{ numHitsVar }}</b>
     <div class="slideContainer">
-      <input type="range" min="3" max="15" v-model="numHitsVar" class="slider" id="numHits">
+      <input type="range" min="3" v-bind:max="maxHits" v-model="numHitsVar" class="slider" id="numHits">
     </div>
     <div class="generalBox">
       <div class="hitsBox">
@@ -36,20 +36,23 @@ export default {
       highlighted: -1, 
       keyUpdate: 0,
       metronome: 120,
+      maxHits: 15,
     }
   },
   methods: {
     genPattern: function () {
       this.patternArray = [];
-      while(this.patternArray.length < 15){
+      while(this.patternArray.length < this.maxHits){
         var letter = this.possArray[Math.floor(Math.random() * this.possArray.length)];
         var patLength = this.patternArray.length;
         if(patLength > 2){
-          while(this.patternArray[patLength - 2].localeCompare(letter) == 0 && this.patternArray[patLength - 3].localeCompare(letter) == 0){
-            letter = this.possArray[Math.floor(Math.random() * this.possArray.length)];
+          if(this.patternArray[patLength - 2].localeCompare(letter) == 0 && this.patternArray[patLength - 1].localeCompare(letter) == 0){
+            var dupArray = this.possArray.slice();
+            dupArray.splice(dupArray.indexOf(letter), 1);
+            letter = dupArray[Math.floor(Math.random() * dupArray.length)];
           }
         }
-        this.patternArray.push(letter);
+        this.patternArray.push(letter)
       }
     },
     changeLetter: function(i){

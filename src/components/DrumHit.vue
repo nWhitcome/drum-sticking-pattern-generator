@@ -40,8 +40,8 @@ export default {
 }
 
 .backBoxSmall {
-    background-color: #EEE;
-    color: #AAA;
+    background-color: #EAEAEA;
+    color: #888;
     width: 3.5em;
     height: 5.5em;
     border-radius: 1em;
