@@ -40,12 +40,17 @@ export default {
     }
   },
   methods: {
+    /*
+     * Generates the sticking pattern and places it into an array. Makes sure there are no triplets of the same hit.
+     */
     genPattern: function () {
       this.patternArray = [];
       while(this.patternArray.length < this.maxHits){
         var letter = this.possArray[Math.floor(Math.random() * this.possArray.length)];
         var patLength = this.patternArray.length;
-        if(patLength > 2){
+
+        //Checks if the previous two items in the array match the one that is about to be added and changes it if it is
+        if(patLength > 1){
           if(this.patternArray[patLength - 2].localeCompare(letter) == 0 && this.patternArray[patLength - 1].localeCompare(letter) == 0){
             var dupArray = this.possArray.slice();
             dupArray.splice(dupArray.indexOf(letter), 1);
