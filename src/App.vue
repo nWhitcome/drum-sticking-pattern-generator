@@ -1,15 +1,15 @@
 <template>
-  <div id="app">
+  <div id="app" v-bind:style="generalStyle">
     <h1>
       Metronome:
-      <input class="textInput" type="number" min="10" max="300" v-model="metronome.bpm" />BPM
+      <input class="textInput" type="number" min="10" max="300" v-model="metronome.bpm" v-bind:style="BPMStyle"/>BPM
     </h1>
     <div class="arrowHolder noselect">
         <div class="arrowInnerBox">
           <i @click="playPause()" style="cursor: pointer">{{ getPlayPauseIcon }}</i>
         </div>
       </div>
-    <b style="font-size: 26px; margin: 10px; color: #333">{{ numHitsVar }}</b>
+    <b style="font-size: 26px; margin: 10px;">{{ numHitsVar }}</b>
     <div class="slideContainer">
       <input
         type="range"
@@ -36,15 +36,20 @@
         ></DrumHit>
       </div>
       <div @click="genPattern()" id="genButton" class="noselect">Generate</div>
+      <div class="slideAndLabel">
+        <h2>Dark Mode</h2>
+        <SliderSwitch :toTrigger="'darkMode'" @activate="darkMode($event)"></SliderSwitch>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import DrumHit from "./components/DrumHit.vue";
+import SliderSwitch from "./components/SliderSwitch.vue";
 export default {
   name: "app",
-  components: { DrumHit },
+  components: { DrumHit, SliderSwitch },
   data() {
     return {
       numHitsVar: 5,
@@ -66,6 +71,13 @@ export default {
         L: new Howl({ src: "src/audio/mid.mp3" }),
         R: new Howl({ src: "src/audio/high.mp3" }),
         K: new Howl({ src: "src/audio/low.mp3" }),
+      },
+      generalStyle: {
+        backgroundColor: '#FFF',
+        color: "#2471a3",
+      },
+      BPMStyle:{
+        color: "#2471a3"
       }
     };
   },
@@ -130,6 +142,22 @@ export default {
       else if(this.patternArray[nextSound].localeCompare("K") == 0){
         this.audioFiles.K.play();
       }
+    },
+    darkMode(value){
+      if(value){
+        this.BPMStyle.color = "#DDD";
+        this.generalStyle = {
+          backgroundColor: '#303030',
+          color: "#DDD",
+        }
+      }
+      else{
+        this.BPMStyle.color = "#2471a3";
+        this.generalStyle = {
+          backgroundColor: '#FFFFFF',
+          color: "#2471a3"
+        }
+      }
     }
   },
   computed: {
@@ -155,6 +183,8 @@ export default {
 <style lang="scss">
 $blue-general: #2471a3;
 $blue-dark: #1c5a82;
+$slider-color: #d3d3d3;
+$transition-time: .2s;
 
 @font-face {
   font-family: "Material_Icons";
@@ -178,7 +208,7 @@ $blue-dark: #1c5a82;
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  transition: .2s;
+  transition: $transition-time;
   color: $blue_general;
 }
 
@@ -203,12 +233,18 @@ i {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   margin-top: 60px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  margin: 0px;
+  transition: $transition-time;
 }
 
 $button-height: 2em;
@@ -223,8 +259,8 @@ $button-height: 2em;
   line-height: $button-height;
   margin: 20px auto;
   opacity: 0.8;
-  -webkit-transition: 0.2s;
-  transition: opacity 0.2s;
+  -webkit-transition: $transition-time;
+  transition: opacity $transition-time;
 }
 
 #genButton:active {
@@ -250,73 +286,79 @@ $button-height: 2em;
 }
 
 .noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Opera and Firefox */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none; 
+  -khtml-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none; 
+  user-select: none; 
 }
 
 .slidecontainer {
-  width: 100%; /* Width of the outside container */
+  width: 100%; 
   max-width: 500px;
 }
 
 /* The slider itself */
 .slider {
   z-index: 2;
-  -webkit-appearance: none; /* Override default CSS styles */
+  -webkit-appearance: none; 
   appearance: none;
-  width: 100%; /* Full-width */
+  width: 100%; 
   max-width: 500px;
-  height: 4px; /* Specified height */
-  background: #d3d3d3; /* Grey background */
-  outline: none; /* Remove outline */
-  opacity: 0.8; /* Set transparency (for mouse-over effects on hover) */
-  -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
-  transition: opacity 0.2s;
+  height: 4px; 
+  background: #d3d3d3; 
+  outline: none; 
+  opacity: 0.8; 
+  -webkit-transition: $transition-time; 
+  transition: opacity $transition-time;
   margin: 10px 0 20px 0;
 }
 
 /* Mouse-over effects */
 .slider:hover,
 #genButton:hover {
-  opacity: 1; /* Fully shown on mouse-over */
+  opacity: 1; 
 }
 
 .slider::-webkit-slider-thumb {
   z-index: 2;
-  -webkit-appearance: none; /* Override default look */
+  -webkit-appearance: none; 
   appearance: none;
-  width: 20px; /* Set a specific slider handle width */
-  height: 20px; /* Slider handle height */
-  background: $blue-general; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+  width: 20px; 
+  height: 20px; 
+  background: $slider-color; 
+  cursor: pointer; 
   border-radius: 50%;
 }
 
 .slider::-moz-range-thumb {
   z-index: 2;
-  width: 20px; /* Set a specific slider handle width */
-  height: 20px; /* Slider handle height */
-  background: $blue-general; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+  width: 20px; 
+  height: 20px; 
+  background: $slider-color; 
+  cursor: pointer; 
   border-radius: 50%;
 }
 
 .textInput {
   background-color: white;
   border: 0px solid black;
-  color: #2c3e50;
   font-size: 26px;
   font-weight: bold;
   width: 70px;
+  transition: $transition-time;
+  background-color: rgba(0, 0, 0, 0)
 }
 
 h1 {
   font-size: 20px;
   font-weight: normal;
+}
+
+.slideAndLabel{
+  display: flex;
+  flex-direction: row;
+  align-items:center;
 }
 </style>
